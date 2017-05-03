@@ -20,9 +20,9 @@ public class GA {
     private int[][] newPopulation;// 新的种群，子代种群  
     private int[] fitness;// 种群适应度，表示种群中各个个体的适应度  
   
-    private float[] Pi;// 种群中各个个体的累计概率  
-    private float Pc;// 交叉概率  
-    private float Pm;// 变异概率  
+    private double[] Pi;// 种群中各个个体的累计概率
+    private double Pc;// 交叉概率
+    private double Pm;// 变异概率
     private int t;// 当前代数  
   
     private Random random;  
@@ -46,7 +46,7 @@ public class GA {
      *            变异率 
      *  
      **/  
-    public GA(int s, int n, int g, float c, float m) {  
+    public GA(int s, int n, int g, double c, double m) {
         scale = s;  
         cityNum = n;  
         MAX_GEN = g;  
@@ -84,7 +84,7 @@ public class GA {
         for (int i = 0; i < cityNum - 1; i++) {  
             distance[i][i] = 0; // 对角线为0  
             for (int j = i + 1; j < cityNum; j++) {  
-                float rij = Math
+                double rij = Math
                         .sqrt(((x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j])  
                                 * (y[i] - y[j])) / 10.0);  
                 // 四舍五入，取整  
@@ -108,7 +108,7 @@ public class GA {
         newPopulation = new int[scale][cityNum];  
         oldPopulation = new int[scale][cityNum];  
         fitness = new int[scale];  
-        Pi = new float[scale];  
+        Pi = new double[scale];
   
         random = new Random(System.currentTimeMillis());  
         /* 
@@ -161,18 +161,18 @@ public class GA {
     // 计算种群中各个个体的累积概率，前提是已经计算出各个个体的适应度fitness[max]，作为赌轮选择策略一部分，Pi[max]  
     void countRate() {  
         int k;  
-        float sumFitness = 0;// 适应度总和
+        double sumFitness = 0;// 适应度总和
   
-        float[] tempf = new float[scale];
+        double[] tempf = new double[scale];
   
         for (k = 0; k < scale; k++) {  
             tempf[k] = 10.0 / fitness[k];  
             sumFitness += tempf[k];  
         }  
   
-        Pi[0] = (float) (tempf[0] / sumFitness);  
+        Pi[0] = (double) (tempf[0] / sumFitness);
         for (k = 1; k < scale; k++) {  
-            Pi[k] = (float) (tempf[k] / sumFitness + Pi[k - 1]);  
+            Pi[k] = (double) (tempf[k] / sumFitness + Pi[k - 1]);
         }  
   
         /* 
@@ -219,10 +219,10 @@ public class GA {
     // 赌轮选择策略挑选  
     public void select() {  
         int k, i, selectId;  
-        float ran1;  
+        double ran1;
         // Random random = new Random(System.currentTimeMillis());  
         for (k = 1; k < scale; k++) {  
-            ran1 = (float) (random.nextInt(65535) % 1000 / 1000.0);  
+            ran1 = (double) (random.nextInt(65535) % 1000 / 1000.0);
             // System.out.println("概率"+ran1);  
             // 产生方式  
             for (i = 0; i < scale; i++) {  
@@ -246,25 +246,25 @@ public class GA {
         select();  
   
         // Random random = new Random(System.currentTimeMillis());  
-        float r;  
+        double r;
   
         // 交叉方法  
         for (k = 0; k < scale; k = k + 2) {  
-            r = random.nextFloat();// /产生概率  
+            r = random.nextdouble();// /产生概率
             // System.out.println("交叉率..." + r);  
             if (r < Pc) {  
                 // System.out.println(k + "与" + k + 1 + "进行交叉...");  
                 //OXCross(k, k + 1);// 进行交叉  
                 OXCross1(k, k + 1);  
             } else {  
-                r = random.nextFloat();// /产生概率  
+                r = random.nextdouble();// /产生概率
                 // System.out.println("变异率1..." + r);  
                 // 变异  
                 if (r < Pm) {  
                     // System.out.println(k + "变异...");  
                     OnCVariation(k);  
                 }  
-                r = random.nextFloat();// /产生概率  
+                r = random.nextdouble();// /产生概率
                 // System.out.println("变异率2..." + r);  
                 // 变异  
                 if (r < Pm) {  
@@ -286,20 +286,20 @@ public class GA {
         select();  
   
         // Random random = new Random(System.currentTimeMillis());  
-        float r;  
+        double r;
   
         for (k = 1; k + 1 < scale / 2; k = k + 2) {  
-            r = random.nextFloat();// /产生概率  
+            r = random.nextdouble();// /产生概率
             if (r < Pc) {  
                 OXCross1(k, k + 1);// 进行交叉  
                 //OXCross(k,k+1);//进行交叉  
             } else {  
-                r = random.nextFloat();// /产生概率  
+                r = random.nextdouble();// /产生概率
                 // 变异  
                 if (r < Pm) {  
                     OnCVariation(k);  
                 }  
-                r = random.nextFloat();// /产生概率  
+                r = random.nextdouble();// /产生概率
                 // 变异  
                 if (r < Pm) {  
                     OnCVariation(k + 1);  
@@ -308,7 +308,7 @@ public class GA {
         }  
         if (k == scale / 2 - 1)// 剩最后一个染色体没有交叉L-1  
         {  
-            r = random.nextFloat();// /产生概率  
+            r = random.nextdouble();// /产生概率
             if (r < Pm) {  
                 OnCVariation(k);  
             }  

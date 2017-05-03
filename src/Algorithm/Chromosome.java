@@ -12,19 +12,19 @@ import java.util.zip.Inflater;
 public class Chromosome extends ArrayList<Integer>{
 
     //交叉概率
-    private float probabilityOfCross;
+    private double probabilityOfCross;
     //变异率
-    private float probabilityOfAberrance;
+    private double probabilityOfAberrance;
     //交叉分块  块数
     private int blocksNum = size()/11;
     //适应度
-    private float fitness;
+    private double fitness;
 
-    public float getFitness() {
+    public double getFitness() {
         return fitness;
     }
 
-    public void setFitness(float fitness) {
+    public void setFitness(double fitness) {
         fitness = fitness;
     }
 
@@ -37,24 +37,40 @@ public class Chromosome extends ArrayList<Integer>{
         set(random2,get(random1));
     }
 
-    public Chromosome crossToAnother(Chromosome chromosome) {
+    /**
+     * 交叉产生子代  借鉴网络上的 基于适应度的启发式多点交叉 http://blog.csdn.net/xujinpeng99/article/details/8982126
+     * @param chromosome
+     * @return
+     */
+    public Chromosome crossWithAnother(Chromosome chromosome) {
         int[] randoms = new int[10];//存放随机数的数组  即把染色体分几块儿
-        for(int i = 0; i < blocksNum; i++) {
+        randoms[0] = 0;
+        randoms[1] = size() - 1;
+        for(int i = 2; i < blocksNum; i++) {
             randoms[i] = (int)Math.random() * (size() - 1);
         }
         Arrays.sort(randoms);
-        probabilityOfAberrance = 0.5f + (this.fitness - chromosome.fitness) / (this.fitness + chromosome.fitness);
-        return chromosome;
+        probabilityOfCross = 0.5d + (chromosome.fitness - this.fitness) / (this.fitness + chromosome.fitness);
+
+        Chromosome son = new Chromosome();
+        for (int i = 0; i < blocksNum - 1; i++) {
+            if(Math.random() > probabilityOfCross) {
+                son.addAll(this.subList(randoms[i],randoms[i + 1]));
+            } else {
+                son.addAll(chromosome.subList(randoms[i],randoms[i + 1]));
+            }
+        }
+        return son;
     }
 
-    public void calculateFitness(float[][] distence) {
-        float distenceSum = 0;
+    public void calculateFitness(double[][] distance) {
+        double distanceSum = 0;
         int i = 0;
         for ( ; i < size(); i++) {
-            distenceSum += distence[get(i)][get(i+1)];
+            distanceSum += distance[get(i)][get(i+1)];
         }
-        distenceSum += distence[get(i)][get(0)];
-        float MaxDistence = 100000f;
-        fitness = MaxDistence - distenceSum;
+        distanceSum += distance[get(i)][get(0)];
+        double MaxDistance = 100000d;
+        fitness = MaxDistance - distanceSum;
     }
 }
