@@ -5,6 +5,8 @@
  */
 package Frame;
 
+import java.awt.*;
+
 /**
  *
  * @author SAKURA
@@ -39,7 +41,6 @@ public class MainFrame extends javax.swing.JFrame {
         jLabelThePath = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jPanel1.setPreferredSize(new java.awt.Dimension(400, 210));
@@ -171,6 +172,11 @@ public class MainFrame extends javax.swing.JFrame {
         );
 
         pack();
+        //将窗体设置在屏幕中间
+        int width = 800;
+        int height = 600;
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //得到屏幕的尺寸
+        setBounds(((screenSize.width-width)/2), ((screenSize.height-height)/2),width,height);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked

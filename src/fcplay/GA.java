@@ -84,7 +84,7 @@ public class GA {
         for (int i = 0; i < cityNum - 1; i++) {  
             distance[i][i] = 0; // 对角线为0  
             for (int j = i + 1; j < cityNum; j++) {  
-                double rij = Math  
+                float rij = Math
                         .sqrt(((x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j])  
                                 * (y[i] - y[j])) / 10.0);  
                 // 四舍五入，取整  
@@ -161,9 +161,9 @@ public class GA {
     // 计算种群中各个个体的累积概率，前提是已经计算出各个个体的适应度fitness[max]，作为赌轮选择策略一部分，Pi[max]  
     void countRate() {  
         int k;  
-        double sumFitness = 0;// 适应度总和  
+        float sumFitness = 0;// 适应度总和
   
-        double[] tempf = new double[scale];  
+        float[] tempf = new float[scale];
   
         for (k = 0; k < scale; k++) {  
             tempf[k] = 10.0 / fitness[k];  

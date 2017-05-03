@@ -6,14 +6,14 @@ package Algorithm;
 public class City {
     private int number;
 
-    private double X_Coordinate;
+    private float X_Coordinate;
 
-    private double Y_Coordinate;
+    private float Y_Coordinate;
 
     public City() {
     }
 
-    public City(int number, double x_Coordinate, double y_Coordinate) {
+    public City(int number, float x_Coordinate, float y_Coordinate) {
 
         this.number = number;
         X_Coordinate = x_Coordinate;
@@ -28,7 +28,7 @@ public class City {
         this.number = number;
     }
 
-    public double getX_Coordinate() {
+    public float getX_Coordinate() {
         return X_Coordinate;
     }
 
@@ -36,7 +36,7 @@ public class City {
         X_Coordinate = x_Coordinate;
     }
 
-    public double getY_Coordinate() {
+    public float getY_Coordinate() {
         return Y_Coordinate;
     }
 
@@ -44,7 +44,7 @@ public class City {
         Y_Coordinate = y_Coordinate;
     }
 
-    public double getDistenceToNext(City otherCity) {
+    public float getDistenceToAnother(City otherCity) {
         return Math.sqrt(Math.pow((this.getX_Coordinate() - otherCity.getX_Coordinate()),2)
                 + Math.pow((this.getY_Coordinate() - otherCity.getY_Coordinate()),2));
     }
