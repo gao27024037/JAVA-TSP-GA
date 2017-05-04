@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import static Algorithm.Parameter.citisNum;
+import static Algorithm.Parameter.populationSize;
+
 /**
  * Created by gao27024037 on 2017/5/3.
  */
@@ -12,9 +15,6 @@ import java.util.Comparator;
 public class Population extends ArrayList<Chromosome> {
 
 
-    private int MaxSize = 60;
-
-    private int size = size();
     //变异率
     private double probabilityOfAberrance = Math.random()*0.05 + 0.05;
 
@@ -31,6 +31,7 @@ public class Population extends ArrayList<Chromosome> {
             }
         });
         sonPopulation.addAll(0,this.subList(0, 3));
+        System.out.println("最短路径"+(200000d-sonPopulation.get(0).getFitness()));
         return sonPopulation;
     }
 
@@ -39,22 +40,25 @@ public class Population extends ArrayList<Chromosome> {
      * 交叉 个体之间
      * @return
      */
-    public ArrayList<Chromosome> cross() {
+    public void cross() {
         Collections.sort(this, new Comparator<Chromosome>() {// 按适应值从小到大排序
             @Override
             public int compare(Chromosome o1, Chromosome o2) {
                 return (int)(o1.getFitness() - o2.getFitness());
             }
         });
-        int i = 0;
-        int sizeNow = this.size();
-        for (; i < sizeNow - 1; i++) {
+        int sizeNow = this.size(); //未交叉前的长度（只有之前的父代）
+        //相邻交叉
+        for (int i = 0; i < sizeNow - 1; i++) {
+            System.out.println(i);
+            System.out.println(this.get(i));
+            System.out.println(this.get(i+1));
             this.add(this.get(i).crossWithAnother(this.get(i + 1)));
         }
-        for(;this.size() < MaxSize;) {
-
+        //随机交叉
+        while(this.size() < populationSize) {
+            this.add(this.get((int)Math.random()*(sizeNow - 1)).crossWithAnother(get((int)Math.random()*(sizeNow - 1))));
         }
-        return null;
     }
 
     /**
@@ -62,8 +66,8 @@ public class Population extends ArrayList<Chromosome> {
      * @return
      */
     public void aberrance() {
-        for (int i = 3; i < size; i++) {
-            if (Math.random() > probabilityOfAberrance) {
+        for (int i = 3; i < size(); i++) {
+            if (Math.random() < probabilityOfAberrance) {
                 this.get(i).aberrance();
             }
         }
@@ -75,10 +79,10 @@ public class Population extends ArrayList<Chromosome> {
     private void caculateProbabilitis(){
         double fitnessSum = 0;
         double probabilitySum = 0;
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size(); i++) {
             fitnessSum += this.get(i).getFitness();
         }
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < size(); i++) {
             probabilitySum += this.get(i).getFitness() / fitnessSum;
             this.get(i).setProbability(probabilitySum);
         }
@@ -90,12 +94,12 @@ public class Population extends ArrayList<Chromosome> {
     private Population roulette() {
         caculateProbabilitis();
         Population sonPopulation = new Population();
-        for (int i = 0; i < size / 8; i++) { //轮盘赌筛选
+        for (int i = 0; i < size() / 8; i++) { //轮盘赌筛选
             double random = Math.random();
             if (random < this.get(0).getProbability()) {
                 sonPopulation.add(this.get(0));
             } else {
-                for (int j = 1; j < size; j++) {
+                for (int j = 1; j < size(); j++) {
                     if (random > this.get(j - 1).getProbability() && random < this.get(j).getProbability()) {
                         sonPopulation.add(this.get(i));
                     }
@@ -103,5 +107,22 @@ public class Population extends ArrayList<Chromosome> {
             }
         }
         return sonPopulation;
+    }
+
+    public Population initPopulation(){
+        ArrayList<Integer> num = new ArrayList<Integer>();
+        Population population = new Population();
+        for (int i = 0; i < citisNum ;i++) {
+            num.add(i);
+        }
+        for (int i = 0; i < populationSize; i++) {
+            Chromosome chromosome = new Chromosome();
+            chromosome.addAll(num);
+            Collections.shuffle(chromosome);
+            chromosome.calculateFitness();
+//            System.out.println(chromosome.getFitness());
+            population.add(chromosome);
+        }
+        return population;
     }
 }

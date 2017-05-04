@@ -10,6 +10,15 @@ public class City {
 
     private double Y_Coordinate;
 
+    @Override
+    public String toString() {
+        return "City{" +
+                "number=" + number +
+                ", X_Coordinate=" + X_Coordinate +
+                ", Y_Coordinate=" + Y_Coordinate +
+                '}';
+    }
+
     public City() {
     }
 
