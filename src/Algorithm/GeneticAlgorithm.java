@@ -21,4 +21,15 @@ public class GeneticAlgorithm {
             }
         }
     }
+
+    private void breed() {
+        Population population = new Population();
+
+        //breed
+        {
+            Population son = population.sift();
+            son.cross();
+            son.aberrance();
+        }
+    }
 }
