@@ -2,6 +2,7 @@ package Algorithm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 
 import static Algorithm.Parameter.citisNum;
 import static Algorithm.Parameter.distance;
@@ -11,8 +12,7 @@ import static Algorithm.Parameter.distance;
  */
 public class Chromosome extends ArrayList<Integer>{
 
-    //交叉概率
-    private double probabilityOfCross;
+
     //交叉分块  块数
     private int blocksNum;
     //适应度
@@ -21,7 +21,7 @@ public class Chromosome extends ArrayList<Integer>{
     private double probability;
 
     public int getBlocksNum() {
-        blocksNum = size() / 11;
+        blocksNum = size() / 8;
         return blocksNum;
     }
 
@@ -43,39 +43,44 @@ public class Chromosome extends ArrayList<Integer>{
 
 
 
-    //变异 将随机数2位置的元素放到随机数1的位置
+    //变异 将随机数1位置的元素放到随机数2的位置 去掉随机数1位置的元素
     public void aberrance() {
             int random1 = (int) (Math.random() * (this.size() - 1));
             int random2 = (int) (Math.random() * (this.size() - 1));
-            set(random2, get(random1));
+            int r1 = remove(random1);
+            add(random2, r1);
         this.calculateFitness();
     }
 
     /**
-     * 交叉产生子代  借鉴网络上的 基于适应度的启发式多点交叉 http://blog.csdn.net/xujinpeng99/article/details/8982126
+     * 交叉产生子代  顺序交叉OX
      * @param chromosome
      * @return
      */
     public Chromosome crossWithAnother(Chromosome chromosome) {
-        int[] randoms = new int[getBlocksNum() + 1];//存放随机数的数组  即把染色体分几块儿
-        randoms[0] = 0;
-        randoms[1] = size() - 1;
-        for(int i = 2; i < blocksNum + 1; i++) {
-            double r = Math.random() * (size() - 1);
-            randoms[i] = (int)(r);
+        HashSet<Integer> randoms = new HashSet<Integer>();
+        int[] changenum = new int[getBlocksNum()];//存放准交换数的数组
+        Chromosome sonChromosome = (Chromosome) chromosome.clone();
+        for(int i = 0; randoms.size() < blocksNum; i++) {
+            randoms.add((int)(Math.random() * (size() - 1)));
         }
-        Arrays.sort(randoms);
-        probabilityOfCross = 0.5d + (chromosome.fitness - this.fitness) / (this.fitness + chromosome.fitness);
-
+        Integer r[] = randoms.toArray(new Integer[]{});
+        Arrays.sort(r);
         //交叉
-        Chromosome sonChromosome = new Chromosome();
-        for (int i = 0; i < blocksNum ; i++) {
-            if(Math.random() < probabilityOfCross) {
-                sonChromosome.addAll(this.subList(randoms[i],randoms[i + 1]));
-            } else {
-                sonChromosome.addAll(chromosome.subList(randoms[i],randoms[i + 1]));
+        //赋予 交换数组 值
+        for (int i = 0; i < randoms.size(); i++) {
+            changenum[i] = this.get(r[i]);
+        }
+        for (int i = 0,k = 0; i< chromosome.size(); i++) {
+            for (int j = 0; j < changenum.length; j++) {
+                if (chromosome.get(i) == changenum[j]) {
+//                    System.out.println(sonChromosome.get(i));
+                    sonChromosome.set(i,changenum[k++]);
+                    break;
+                }
             }
         }
+
         sonChromosome.calculateFitness();
         return sonChromosome;
     }
@@ -84,7 +89,6 @@ public class Chromosome extends ArrayList<Integer>{
         double distanceSum = 0;
         int i = 0;
         for ( ; i < citisNum - 2; i++) {
-//            System.out.println(i+" "+distance[get(i)][get(i+1)]);
             distanceSum += distance[get(i)][get(i+1)];
         }
         distanceSum += distance[get(i)][get(0)];

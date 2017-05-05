@@ -10,7 +10,7 @@ public class Parameter {
 
     public static int citisNum = 48;
 
-    public static int generation = 1000;
+    public static int generation = 1;
 
     public static int populationSize = 50;
 

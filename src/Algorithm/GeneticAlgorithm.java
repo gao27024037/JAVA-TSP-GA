@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import static Algorithm.Parameter.distance;
+import static Algorithm.Parameter.generation;
+
 /**
  * Created by gao27024037 on 2017/4/28.
  */
@@ -27,7 +30,7 @@ public class GeneticAlgorithm {
 
     public static void main(String[] args) throws IOException {
         BufferedReader data = new BufferedReader(new InputStreamReader(
-                new FileInputStream("//home//gyl//桌面//data.txt")));
+                new FileInputStream("src//data.txt")));
         int cityNum = 48;
         String strbuff;
         for (int i = 0; i < cityNum; i++) {
@@ -38,16 +41,13 @@ public class GeneticAlgorithm {
             Cities.add(new City(i,Integer.valueOf(strcol[1]),Integer.valueOf(strcol[2])));
         }
         Parameter.calculatedistance(Cities);
-        System.out.println(Parameter.distance);
+        System.out.println(distance);
         Population population = new Population().initPopulation();
-
-        int generation = 1000;
         for (int i = 0; i < generation; i++) {
             System.out.println("第 "+i+" 代");
-            System.out.println(population.size());
-            for (int j=0 ; j< population.size(); j++) {
-                System.out.println(j+" "+population.get(j));
-            }
+//            for (int j=0 ; j< population.size(); j++) {
+//                System.out.println(j+" "+population.get(j));
+//            }
             population = population.sift();
             population.cross();
             population.aberrance();
