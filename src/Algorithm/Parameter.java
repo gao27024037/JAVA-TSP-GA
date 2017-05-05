@@ -6,18 +6,21 @@ import java.util.ArrayList;
  * Created by gyl on 17-5-4.
  */
 public class Parameter {
+
+    public static double MaxDistance = 60000d;
+
     public static double[][] distance;
 
     public static int citisNum = 48;
 
-    public static int generation = 1;
+    public static int generation = 3000;
 
-    public static int populationSize = 50;
+    public static int populationSize = 80;
 
     //交叉概率
     public static double probabilityOfCross = 0.9;
     //变异率
-    public static double probabilityOfAberrance = Math.random()*0.15 + 0.05;
+    public static double probabilityOfAberrance = Math.random()*0.25 + 0.05;
 
     public static double[][] getDistance() {
         return distance;

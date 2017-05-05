@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import static Algorithm.Parameter.MaxDistance;
 import static Algorithm.Parameter.distance;
 import static Algorithm.Parameter.generation;
 
@@ -41,9 +42,17 @@ public class GeneticAlgorithm {
             Cities.add(new City(i,Integer.valueOf(strcol[1]),Integer.valueOf(strcol[2])));
         }
         Parameter.calculatedistance(Cities);
-        System.out.println(distance);
+//        int a[] = {2,13,12,22,11,10,14,39,37,0,7,8,30,43,6,17,27,5,29,42,16,26,36,18,35,45,32,19,46,24,20,31,38,23,9,3,25,44,34,41,47,4,1,28,33,40,15,21};
+//        Chromosome chromosome = new Chromosome();
+//        for ( int i = 0; i < a.length; i++) {
+//            chromosome.add(a[i]);
+//        }
+//        chromosome.calculateFitness();
+//        System.out.println(MaxDistance -chromosome.getFitness());
         Population population = new Population().initPopulation();
+//        population.printpopulation(population);
         for (int i = 0; i < generation; i++) {
+
             System.out.println("第 "+i+" 代");
 //            for (int j=0 ; j< population.size(); j++) {
 //                System.out.println(j+" "+population.get(j));

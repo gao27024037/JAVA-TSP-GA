@@ -14,62 +14,68 @@ import static Algorithm.Parameter.*;
 public class Population extends ArrayList<Chromosome> {
 
 
-
-
     /**
      * 筛选优良个体 利用轮盘赌筛选，但前3个必须留到下一代
      * @return
      */
     public void printpopulation(Population population) {
         for (int i = 0; i < Math.min(population.size(),15); i++) {
-            System.out.println(population.get(i).getFitness()+" "+population.get(i));
+            System.out.println(population.get(i).getFitness()+" ||"+population.get(i).getProbability()+"||"+population.get(i));
         }
     }
 
-    public Population sift() {
+    public void caculateFitness() {
+        for (Chromosome chromosome: this
+             ) {
+            chromosome.calculateFitness();
+        }
+    }
+
+    public void sort() {
+        caculateFitness();
         Collections.sort(this, new Comparator<Chromosome>() {// 按适应值从大到小排序
             @Override
             public int compare(Chromosome o1, Chromosome o2) {
                 return (int)(o2.getFitness() - o1.getFitness());
             }
         });
-//        System.out.println("第0代本身：");
-//        printpopulation(this);
-        Population sonPopulation = this.roulette();//子代
-//        sonPopulation.addAll(0,this.subList(0, 3));
-//        System.out.println("加了父代前3个的子代");
-//        printpopulation(sonPopulation);
-        System.out.println("最短路径"+(200000d-sonPopulation.get(0).getFitness())+""+sonPopulation.get(0));
-        return sonPopulation;
     }
 
+    public Population sift() {
+        this.sort();
+        Population sonPopulation = this.roulette();//子代
+        sonPopulation.sort();
+        for (int i = 0; ; i++) {
+            if (!sonPopulation.contains(this.get(i))) {
+                sonPopulation.add(0,this.get(i));
+                break;
+            }
+        }
+        return sonPopulation;
+    }
 
     /**
      * 交叉 个体之间
      * @return
      */
     public void cross() {
-        Collections.sort(this, new Comparator<Chromosome>() {// 按适应值从大到小排序
-            @Override
-            public int compare(Chromosome o1, Chromosome o2) {
-                return (int)(o2.getFitness() - o1.getFitness());
-            }
-        });
         int sizeNow = this.size(); //未交叉前的长度（只有之前的父代）
-//        System.out.println("交叉前的子代");
-//        printpopulation(this);
         //相邻交叉
-        for (int i = 0; i < sizeNow - 1; i++) {
+        for (int i = 0; i < sizeNow - 1; i += 1) {
             if (Math.random() < probabilityOfCross) {
-                this.add(this.get(i).crossWithAnother(this.get(i + 1)));
+                Chromosome chromosome = this.get(i).crossWithAnother(this.get(i + 1));
+                if (!this.contains(chromosome)) {
+                    this.add(chromosome);
+                }
             }
         }
         //随机交叉
         while(this.size() < populationSize) {
-            this.add(this.get((int)(Math.random()*(sizeNow - 1))).crossWithAnother(get((int)(Math.random()*(sizeNow - 1)))));
+            Chromosome chromosome = this.get((int)(Math.random()*(sizeNow - 1))).crossWithAnother(get((int)(Math.random()*(sizeNow - 1))));
+            if (!this.contains(chromosome)) {
+                this.add(chromosome);
+            }
         }
-//        System.out.println("交叉后的子代");
-//        printpopulation(this);
     }
 
     /**
@@ -82,6 +88,14 @@ public class Population extends ArrayList<Chromosome> {
                 this.get(i).aberrance();
             }
         }
+        this.sort();
+        int i =1 ;
+        System.out.println("最短路径"+(MaxDistance-this.get(0).getFitness())+""+this.get(0));
+//        System.out.println((MaxDistance-this.get(i).getFitness())+""+this.get(i++));
+//        System.out.println((MaxDistance-this.get(i).getFitness())+""+this.get(i++));
+//        System.out.println((MaxDistance-this.get(i).getFitness())+""+this.get(i++));
+//        System.out.println((MaxDistance-this.get(i).getFitness())+""+this.get(i++));
+//        System.out.println((MaxDistance-this.get(i).getFitness())+""+this.get(i++) + " "+i);
     }
 
     /**
@@ -90,6 +104,7 @@ public class Population extends ArrayList<Chromosome> {
     private void caculateProbabilitis(){
         double fitnessSum = 0;
         double probabilitySum = 0;
+        caculateFitness();
         for (int i = 0; i < size(); i++) {
             fitnessSum += this.get(i).getFitness();
         }
@@ -105,7 +120,7 @@ public class Population extends ArrayList<Chromosome> {
     private Population roulette() {
         caculateProbabilitis();
         Population sonPopulation = new Population();
-        for (int i = 0; i < size() / 8; i++) { //轮盘赌筛选
+        for (int i = 0; i < size() / 6; i++) { //轮盘赌筛选
             double random = Math.random();
             if (random < this.get(0).getProbability()) {
                 sonPopulation.add(this.get(0));
@@ -117,6 +132,9 @@ public class Population extends ArrayList<Chromosome> {
                 }
             }
         }
+//        printpopulation(this);
+//        System.out.println("轮盘赌筛选出来的：");
+//        printpopulation(sonPopulation);
         return sonPopulation;
     }
 
