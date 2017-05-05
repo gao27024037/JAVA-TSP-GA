@@ -14,6 +14,11 @@ public class Parameter {
 
     public static int populationSize = 50;
 
+    //交叉概率
+    public static double probabilityOfCross = 0.9;
+    //变异率
+    public static double probabilityOfAberrance = Math.random()*0.15 + 0.05;
+
     public static double[][] getDistance() {
         return distance;
     }
@@ -52,7 +57,7 @@ public class Parameter {
         for (int i = 0; i < Cities.size(); i++) {
             distance[i][i] = 0; //对角线为0
             for (int j = i + 1; j < Cities.size(); j++) {
-                distance[j][i] = distance[i][j] = Cities.get(i).getdistanceToAnother(Cities.get(j));
+                distance[j][i] = distance[i][j] = Cities.get(i).getDistanceToAnother(Cities.get(j));
             }
         }
     }

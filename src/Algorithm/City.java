@@ -53,7 +53,7 @@ public class City {
         Y_Coordinate = y_Coordinate;
     }
 
-    public double getdistanceToAnother(City otherCity) {
+    public double getDistanceToAnother(City otherCity) {
         return Math.sqrt(Math.pow((this.getX_Coordinate() - otherCity.getX_Coordinate()),2)
                 + Math.pow((this.getY_Coordinate() - otherCity.getY_Coordinate()),2));
     }

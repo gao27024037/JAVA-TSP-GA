@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import static Algorithm.Parameter.citisNum;
-import static Algorithm.Parameter.populationSize;
+import static Algorithm.Parameter.*;
 
 /**
  * Created by gao27024037 on 2017/5/3.
@@ -15,10 +14,7 @@ import static Algorithm.Parameter.populationSize;
 public class Population extends ArrayList<Chromosome> {
 
 
-    //交叉概率
-    private double probabilityOfCross = 0.9;
-    //变异率
-    private double probabilityOfAberrance = Math.random()*0.05 + 0.05;
+
 
     /**
      * 筛选优良个体 利用轮盘赌筛选，但前3个必须留到下一代
@@ -37,12 +33,12 @@ public class Population extends ArrayList<Chromosome> {
                 return (int)(o2.getFitness() - o1.getFitness());
             }
         });
-        System.out.println("第0代本身：");
-        printpopulation(this);
+//        System.out.println("第0代本身：");
+//        printpopulation(this);
         Population sonPopulation = this.roulette();//子代
-        sonPopulation.addAll(0,this.subList(0, 3));
-        System.out.println("加了父代前3个的子代");
-        printpopulation(sonPopulation);
+//        sonPopulation.addAll(0,this.subList(0, 3));
+//        System.out.println("加了父代前3个的子代");
+//        printpopulation(sonPopulation);
         System.out.println("最短路径"+(200000d-sonPopulation.get(0).getFitness())+""+sonPopulation.get(0));
         return sonPopulation;
     }
@@ -60,8 +56,8 @@ public class Population extends ArrayList<Chromosome> {
             }
         });
         int sizeNow = this.size(); //未交叉前的长度（只有之前的父代）
-        System.out.println("交叉前的子代");
-        printpopulation(this);
+//        System.out.println("交叉前的子代");
+//        printpopulation(this);
         //相邻交叉
         for (int i = 0; i < sizeNow - 1; i++) {
             if (Math.random() < probabilityOfCross) {
@@ -70,10 +66,10 @@ public class Population extends ArrayList<Chromosome> {
         }
         //随机交叉
         while(this.size() < populationSize) {
-            this.add(this.get((int)Math.random()*(sizeNow - 1)).crossWithAnother(get((int)Math.random()*(sizeNow - 1))));
+            this.add(this.get((int)(Math.random()*(sizeNow - 1))).crossWithAnother(get((int)(Math.random()*(sizeNow - 1)))));
         }
-        System.out.println("交叉后的子代");
-        printpopulation(this);
+//        System.out.println("交叉后的子代");
+//        printpopulation(this);
     }
 
     /**
