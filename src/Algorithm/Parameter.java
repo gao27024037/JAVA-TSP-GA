@@ -15,12 +15,12 @@ public class Parameter {
 
     public static int generation = 3000;
 
-    public static int populationSize = 80;
+    public static int populationSize = 50;
 
     //交叉概率
     public static double probabilityOfCross = 0.9;
     //变异率
-    public static double probabilityOfAberrance = Math.random()*0.25 + 0.05;
+    public static double probabilityOfAberrance = Math.random()*0.05 + 0.05;
 
     public static double[][] getDistance() {
         return distance;

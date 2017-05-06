@@ -42,7 +42,7 @@ public class GeneticAlgorithm {
             Cities.add(new City(i,Integer.valueOf(strcol[1]),Integer.valueOf(strcol[2])));
         }
         Parameter.calculatedistance(Cities);
-//        int a[] = {2,13,12,22,11,10,14,39,37,0,7,8,30,43,6,17,27,5,29,42,16,26,36,18,35,45,32,19,46,24,20,31,38,23,9,3,25,44,34,41,47,4,1,28,33,40,15,21};
+        int a[] = {2,13,12,22,11,10,14,39,37,0,7,8,30,43,6,17,27,5,29,42,16,26,36,18,35,45,32,19,46,24,20,31,38,23,9,3,25,44,34,41,47,4,1,28,33,40,15,21};
 //        Chromosome chromosome = new Chromosome();
 //        for ( int i = 0; i < a.length; i++) {
 //            chromosome.add(a[i]);
