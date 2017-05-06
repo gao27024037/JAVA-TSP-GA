@@ -15,16 +15,14 @@ import static java.util.Collections.swap;
 public class Chromosome extends ArrayList<Integer>{
 
 
-    //交叉分块  块数
-    private int blocksNum;
+
     //适应度
     private double fitness;
     //占比 在总的里面的占比 (累计占比)
-    private double probability;
+    private double probability = 0;
 
     public int getBlocksNum() {
-        blocksNum = size() / 3;
-        return blocksNum;
+        return size() / 3;
     }
 
     public double getProbability() {
@@ -50,7 +48,7 @@ public class Chromosome extends ArrayList<Integer>{
      */
     public Chromosome crossWithAnother(Chromosome chromosome) {
         Chromosome sonChromosome = new Chromosome();
-        if (Math.random() > 0.1) {
+        if (Math.random() > 0.5) {
         /*Order Crossover (OX)*/
             sonChromosome = crossByOX(chromosome);
         } else {
@@ -62,7 +60,7 @@ public class Chromosome extends ArrayList<Integer>{
 
     //变异 将随机数1位置的元素放到随机数2的位置 去掉随机数1位置的元素
     public void aberrance() {
-        if (Math.random() > 0.1) {
+        if (Math.random() > 0.5) {
             aberraceByBlock();
         } else {
             aberraceByElement();
@@ -75,7 +73,7 @@ public class Chromosome extends ArrayList<Integer>{
      * @return
      */
     public Chromosome crossByOX(Chromosome chromosome) {
-        int randomLength = (int)(Math.random()*12 + 12);// 随机的长度范围：12 -- 24
+        int randomLength = (int)(Math.random()*(Cities.size()/4) + Cities.size()/4);// 随机的长度范围：12 -- 24
         int randomLocation = (int)(Math.random()*(size() - randomLength - 1));//随机开始交叉位置
         Chromosome sonChromosome = new Chromosome();
         Chromosome subChromosome = new Chromosome();
@@ -101,7 +99,7 @@ public class Chromosome extends ArrayList<Integer>{
         HashSet<Integer> randoms = new HashSet<Integer>();
         int[] changenum = new int[getBlocksNum()];//存放准交换数的数组
         Chromosome sonChromosome = (Chromosome) chromosome.clone();
-        while(randoms.size() < blocksNum) {
+        while(randoms.size() < getBlocksNum()) {
             randoms.add((int)(Math.random() * (size() - 1)));
         }
         Integer r[] = randoms.toArray(new Integer[]{});
@@ -126,7 +124,7 @@ public class Chromosome extends ArrayList<Integer>{
     public void calculateFitness() {
         double distanceSum = 0;
         int i = 0;
-        for ( ; i < citisNum - 2; i++) {
+        for ( ; i < Cities.size() - 2; i++) {
             distanceSum += distance[get(i)][get(i+1)];
         }
         distanceSum += distance[get(i)][get(0)];

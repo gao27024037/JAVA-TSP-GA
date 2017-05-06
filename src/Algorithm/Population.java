@@ -1,5 +1,7 @@
 package Algorithm;
 
+import org.omg.CORBA.Object;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -42,13 +44,24 @@ public class Population extends ArrayList<Chromosome> {
     }
 
     public Population sift() {
-        this.sort();
-        Population sonPopulation = this.roulette();//子代
-        sonPopulation.sort();
-            if (!sonPopulation.contains(this.get(0))) {
-                sonPopulation.add(0, this.get(0));
+//        this.sort();
+        Population sonPopulation = new Population();
+        sonPopulation.addAll(this.roulette());//子代
+        clearProbability();
+        for (int i = 0; i < size()/12; i++) {
+            if (!sonPopulation.contains(this.get(i))) {
+                sonPopulation.add(i, this.get(i));
             }
+        }
+        this.sort();
         return sonPopulation;
+    }
+
+    private void clearProbability() {
+        for (Chromosome chromosome:this
+             ) {
+            chromosome.setProbability(0);
+        }
     }
 
     /**
@@ -61,14 +74,20 @@ public class Population extends ArrayList<Chromosome> {
         for (int i = 0; i < sizeNow - 1; i += 1) {
             if (Math.random() < probabilityOfCross) {
                 Chromosome chromosome = this.get(i).crossWithAnother(this.get(i + 1));
+                chromosome.calculateFitness();
                 if (!this.contains(chromosome)) {
                     this.add(chromosome);
                 }
             }
         }
+
         //随机交叉
         while(this.size() < populationSize) {
+//            System.out.println("++++++++++++++++++++++");
+//            System.out.println(sizeNow+" "+ this.size());
+//            printpopulation(this);
             Chromosome chromosome = this.get((int)(Math.random()*(sizeNow - 1))).crossWithAnother(get((int)(Math.random()*(sizeNow - 1))));
+            chromosome.calculateFitness();
             if (!this.contains(chromosome)) {
                 this.add(chromosome);
             }
@@ -89,7 +108,14 @@ public class Population extends ArrayList<Chromosome> {
         int i =1 ;
         System.out.println("最短路径"+(MaxDistance-this.get(0).getFitness())+""+this.get(0));
         chartData.add(MaxDistance-this.get(0).getFitness());
-//        System.out.println((MaxDistance-this.get(i).getFitness())+""+this.get(i++));
+        chartData2.add(MaxDistance-this.get(1).getFitness());
+        double a = 0;
+        for (Chromosome chromosose: this
+             ) {
+            a += (MaxDistance-chromosose.getFitness());
+        }
+        chartDataAverage.add(a/size());
+//        System.out.println((MaxDistance-his.get(i).getFitness())+""+this.get(i++));
 //        System.out.println((MaxDistance-this.get(i).getFitness())+""+this.get(i++));
 //        System.out.println((MaxDistance-this.get(i).getFitness())+""+this.get(i++));
 //        System.out.println((MaxDistance-this.get(i).getFitness())+""+this.get(i++));
@@ -120,26 +146,24 @@ public class Population extends ArrayList<Chromosome> {
         Population sonPopulation = new Population();
         for (int i = 0; i < size() / 6; i++) { //轮盘赌筛选
             double random = Math.random();
-            if (random < this.get(0).getProbability()) {
+            if (random < this.get(0).getProbability() && !sonPopulation.contains(this.get(0))) {
                 sonPopulation.add(this.get(0));
             } else {
                 for (int j = 1; j < size(); j++) {
-                    if (random > this.get(j - 1).getProbability() && random < this.get(j).getProbability()) {
+                    if (random > this.get(j - 1).getProbability() && random < this.get(j).getProbability()
+                            && !sonPopulation.contains(this.get(j))) {
                         sonPopulation.add(this.get(j));
                     }
                 }
             }
         }
-//        printpopulation(this);
-//        System.out.println("轮盘赌筛选出来的：");
-//        printpopulation(sonPopulation);
         return sonPopulation;
     }
 
     public Population initPopulation(){
         ArrayList<Integer> num = new ArrayList<Integer>();
         Population population = new Population();
-        for (int i = 0; i < citisNum ;i++) {
+        for (int i = 0; i < Cities.size() ;i++) {
             num.add(i);
         }
         for (int i = 0; i < populationSize; i++) {

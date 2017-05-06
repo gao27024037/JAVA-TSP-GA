@@ -7,22 +7,26 @@ import java.util.ArrayList;
  */
 public class Parameter {
 
-    public static double MaxDistance = 60000d;
+    public static double MaxDistance = 5000;
 
     public static double[][] distance;
 
-    public static int citisNum = 48;
-
-    public static int generation = 3000;
+    public static int generation =5000;
 
     public static int populationSize = 50;
 
     public static ArrayList<Double> chartData = new ArrayList<Double>();
+    public static ArrayList<Double> chartData2 = new ArrayList<Double>();
+    public static ArrayList<Double> chartDataAverage = new ArrayList<Double>();
 
     //交叉概率
     public static double probabilityOfCross = 0.9;
     //变异率
-    public static double probabilityOfAberrance = Math.random()*0.25 + 0.05;
+    public static double probabilityOfAberrance = Math.random()*0.15 + 0.05;
+
+    public static ArrayList<City> Cities = new ArrayList<City>();//初始城市群
+
+//    public static int Cities.size();
 
     public static double[][] getDistance() {
         return distance;
@@ -30,14 +34,6 @@ public class Parameter {
 
     public static void setDistance(double[][] distance) {
         Parameter.distance = distance;
-    }
-
-    public static int getCitisNum() {
-        return citisNum;
-    }
-
-    public static void setCitisNum(int citisNum) {
-        Parameter.citisNum = citisNum;
     }
 
     public static int getGeneration() {

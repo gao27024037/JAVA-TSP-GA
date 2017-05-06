@@ -12,8 +12,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 import java.awt.*;
 
-import static Algorithm.Parameter.chartData;
-import static Algorithm.Parameter.generation;
+import static Algorithm.Parameter.*;
 
 
 public class StatisticsFrame {
@@ -36,13 +35,17 @@ public class StatisticsFrame {
     public DefaultCategoryDataset createDataset() {
 
         DefaultCategoryDataset linedataset = new DefaultCategoryDataset();
+
         // 曲线名称
         String series = "最佳距离";  // series指的就是报表里的那条数据线
+        String series2 = "次佳距离";  // series指的就是报表里的那条数据线
+        String seriesA = "平均距离";  // series指的就是报表里的那条数据线
         //因此 对数据线的相关设置就需要联系到serise
         //比如说setSeriesPaint 设置数据线的颜色
         for (int i = 0; i < generation; i++) {
             linedataset.addValue(chartData.get(i),series+"",""+i);
-
+            linedataset.addValue(chartData2.get(i),series2+"",""+i);
+            linedataset.addValue(chartDataAverage.get(i),seriesA+"",""+i);
         }
         return linedataset;
     }

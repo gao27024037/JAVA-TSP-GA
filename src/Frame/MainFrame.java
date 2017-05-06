@@ -5,7 +5,20 @@
  */
 package Frame;
 
+import Algorithm.Chromosome;
+import Algorithm.City;
+import Algorithm.GeneticAlgorithm;
+import Algorithm.Parameter;
+
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.geom.*;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+
+import static Algorithm.Parameter.*;
+import static Algorithm.Parameter.Cities;
 
 /**
  *
@@ -29,16 +42,16 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jButtonRandomGenerate = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jButtonCalculate = new javax.swing.JButton();
-        jButtonReset = new javax.swing.JButton();
-        jLabelTheShortestLength = new javax.swing.JLabel();
-        jLabelTheLength = new javax.swing.JLabel();
-        jLabelTheBestPath = new javax.swing.JLabel();
-        jLabelThePath = new javax.swing.JLabel();
+        jPanel1 = new DrawPanel();
+        jPanel2 = new JPanel();
+        jButtonRandomGenerate = new JButton();
+        jComboBoxCityNum = new javax.swing.JComboBox<>();
+        jButtonCalculate = new JButton();
+        jButtonReset = new JButton();
+        jLabelTheShortestLength = new JLabel();
+        jLabelTheLength = new JLabel();
+        jLabelTheBestPath = new JLabel();
+        jLabelThePath = new JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -64,6 +77,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
+        jPanel1.setBackground(Color.white);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
@@ -72,41 +86,56 @@ public class MainFrame extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 321, Short.MAX_VALUE)
         );
+        
+
+        jComboBoxCityNum.setEditable(true);
+        jComboBoxCityNum.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "40", "20", "30","50" }));
+        jComboBoxCityNum.setMinimumSize(new java.awt.Dimension(130, 25));
+        jComboBoxCityNum.setPreferredSize(new java.awt.Dimension(130, 25));
+        jComboBoxCityNum.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxCityNumActionPerformed(evt);
+            }
+        });
 
         jButtonRandomGenerate.setText("随机生成");
         jButtonRandomGenerate.setMaximumSize(new java.awt.Dimension(130, 25));
         jButtonRandomGenerate.setMinimumSize(new java.awt.Dimension(130, 25));
         jButtonRandomGenerate.setPreferredSize(new java.awt.Dimension(130, 25));
-
-        jComboBox1.setEditable(true);
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "10", "20", "30", "40", "50" }));
-        jComboBox1.setMinimumSize(new java.awt.Dimension(130, 25));
-        jComboBox1.setPreferredSize(new java.awt.Dimension(130, 25));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRandomGenerate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                jButtonRandomGenerateActionPerformed(evt);
             }
         });
-
+        
         jButtonCalculate.setText("计算最佳路径");
         jButtonCalculate.setMaximumSize(new java.awt.Dimension(130, 25));
         jButtonCalculate.setMinimumSize(new java.awt.Dimension(130, 25));
         jButtonCalculate.setPreferredSize(new java.awt.Dimension(130, 25));
+        jButtonCalculate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCalculateActionPerformed(evt);
+            }
+        });
 
         jButtonReset.setText("重置");
         jButtonReset.setMaximumSize(new java.awt.Dimension(130, 25));
         jButtonReset.setMinimumSize(new java.awt.Dimension(130, 25));
         jButtonReset.setPreferredSize(new java.awt.Dimension(130, 25));
+        jButtonReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonResetActionPerformed(evt);
+            }
+        });
 
         jLabelTheShortestLength.setText("最佳长度:");
-
         jLabelTheLength.setMaximumSize(new java.awt.Dimension(400, 15));
         jLabelTheLength.setMinimumSize(new java.awt.Dimension(400, 15));
         jLabelTheLength.setPreferredSize(new java.awt.Dimension(400, 15));
+        
 
-        jLabelTheBestPath.setText("最佳路径:");
-
-        jLabelThePath.setText("2222222222222222222222222222222222222222222222222222222222222222222222222222222222222");
+        jLabelTheBestPath.setText("建议选取20个以上的点");
+        jLabelThePath.setText("");
         jLabelThePath.setMaximumSize(new java.awt.Dimension(500, 15));
         jLabelThePath.setMinimumSize(new java.awt.Dimension(500, 15));
         jLabelThePath.setPreferredSize(new java.awt.Dimension(500, 15));
@@ -121,7 +150,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButtonRandomGenerate, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jComboBoxCityNum, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButtonCalculate, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -142,7 +171,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonRandomGenerate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxCityNum, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonCalculate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
@@ -177,18 +206,25 @@ public class MainFrame extends javax.swing.JFrame {
         int height = 600;
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //得到屏幕的尺寸
         setBounds(((screenSize.width-width)/2), ((screenSize.height-height)/2),width,height);
+        setResizable(false);
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
-        // TODO add your handling code here:
+        Cities.add(new City(Cities.size(),evt.getX(),evt.getY()));
+        System.out.println(Cities.get(Cities.size() -1));
+        point2DS.add(new Point2D.Double(evt.getX(), evt.getY()));
+        jPanel1.repaint();
     }//GEN-LAST:event_jPanel1MouseClicked
 
     private void jPanel1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseEntered
         // TODO add your handling code here:
+        setCursor(Cursor.CROSSHAIR_CURSOR);
     }//GEN-LAST:event_jPanel1MouseEntered
 
     private void jPanel1MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseExited
         // TODO add your handling code here:
+        setCursor(Cursor.DEFAULT_CURSOR);
     }//GEN-LAST:event_jPanel1MouseExited
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
@@ -199,9 +235,79 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jPanel1MouseReleased
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void jComboBoxCityNumActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCityNumActionPerformed
             // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_jComboBoxCityNumActionPerformed
+
+    private void jButtonResetActionPerformed(ActionEvent evt) {
+        Cities.clear();
+        point2DS.clear();
+        line2DS.clear();
+        jPanel1.repaint();
+        chartData.clear();
+        chartData2.clear();
+        chartDataAverage.clear();
+        distance = null;
+    }
+
+    private void jButtonCalculateActionPerformed(ActionEvent evt) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                paintLine();
+            }
+        }).start();
+    }
+
+    private Chromosome getBestRoute() {
+        return GeneticAlgorithm.Route();
+    }
+
+    private void paintLine() {
+        line2DS.clear();
+        Chromosome route = getBestRoute();
+        int i = 0;
+        for (; i < Cities.size() - 1; i++) {
+            line2DS.add(new Line2D.Double(point2DS.get(route.get(i)),point2DS.get(route.get(i+1))));
+//            jLabelThePath.setText(jLabelThePath.getText() + route.get(i) + "->");
+        }
+//        jLabelThePath.setText(jLabelThePath.getText() + route.get(i) + "->" + route.get(0));
+        line2DS.add(new Line2D.Double(point2DS.get(route.get(i)),point2DS.get(route.get(0))));
+        jPanel1.repaint();
+        jLabelTheLength.setText((MaxDistance - route.getFitness())+"");
+    }
+
+    private void jButtonRandomGenerateActionPerformed(ActionEvent evt) {
+        isNum();
+        RandomGenerate();
+    }
+
+    private void RandomGenerate() {
+        Cities.clear();
+        point2DS.clear();
+        line2DS.clear();
+        double MaxWidth = jPanel1.getWidth();
+        double MaxHeight = jPanel1.getHeight();
+        for (int i = 0; i < cityNum; i++) {
+            px = Math.random()*(MaxWidth - 1);
+            py = Math.random()*(MaxHeight - 1);
+            Cities.add(new City(Cities.size(),px,py));
+            point2DS.add(new Point2D.Double(px, py));
+        }
+        jPanel1.repaint();
+    }
+
+    //判断框内是否是数字
+    private void isNum() {
+        String num;
+        if (!((num = jComboBoxCityNum.getSelectedItem().toString()).matches("^[0-9]*[1-9][0-9]*$"))) {
+            JOptionPane.showMessageDialog(null, "请输入100一下的的正整数", "警告", JOptionPane.ERROR_MESSAGE);
+            jComboBoxCityNum.requestFocusInWindow();//输入不通过时焦点落回错误文本框
+        } else {
+            cityNum = Integer.parseInt(num);
+        }
+    }
+    
 
     /**
      * @param args the command line arguments
@@ -239,15 +345,41 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonCalculate;
-    private javax.swing.JButton jButtonRandomGenerate;
-    private javax.swing.JButton jButtonReset;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JLabel jLabelTheBestPath;
-    private javax.swing.JLabel jLabelTheLength;
-    private javax.swing.JLabel jLabelThePath;
-    private javax.swing.JLabel jLabelTheShortestLength;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private JButton jButtonCalculate;
+    private JButton jButtonRandomGenerate;
+    private JButton jButtonReset;
+    private JComboBox<String> jComboBoxCityNum;
+    private JLabel jLabelTheBestPath;
+    private JLabel jLabelTheLength;
+    private JLabel jLabelThePath;
+    private JLabel jLabelTheShortestLength;
+    private JPanel jPanel1;
+    private JPanel jPanel2;
+
+
+    private int cityNum = 0;
+    private double px = 0;
+    private double py = 0;
+    private double radius = 5;
+    private ArrayList<Point2D> point2DS = new ArrayList<Point2D>();
+    private ArrayList<Line2D> line2DS = new ArrayList<Line2D>();
+
+    private class DrawPanel extends JPanel {
+        public void paintComponent(Graphics graphics) {
+            super.paintComponent(graphics);
+            Graphics2D graphics2D = (Graphics2D)graphics;
+            graphics2D.setColor(Color.GREEN);
+            for (Point2D point2D: point2DS
+                 ) {
+                graphics2D.fill(new Ellipse2D.Double(point2D.getX() - radius,point2D.getY() - radius,radius , radius));
+                graphics2D.setColor(Color.RED);
+            }
+            graphics2D.setColor(Color.orange);
+            for (Line2D line2D: line2DS
+                 ) {
+                graphics2D.draw(line2D);
+            }
+        }
+    }
     // End of variables declaration//GEN-END:variables
 }
