@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 import static Algorithm.Parameter.*;
+import static java.util.Collections.newSetFromMap;
 import static java.util.Collections.swap;
 
 /**
@@ -49,7 +50,7 @@ public class Chromosome extends ArrayList<Integer>{
      */
     public Chromosome crossWithAnother(Chromosome chromosome) {
         Chromosome sonChromosome = new Chromosome();
-        if (Math.random() > 0) {
+        if (Math.random() > 0.1) {
         /*Order Crossover (OX)*/
             sonChromosome = crossByOX(chromosome);
         } else {
@@ -61,10 +62,10 @@ public class Chromosome extends ArrayList<Integer>{
 
     //变异 将随机数1位置的元素放到随机数2的位置 去掉随机数1位置的元素
     public void aberrance() {
-        for (int i = 0; i< probabilityOfAberrance  * size(); i++) {
-            int random1 = (int) (Math.random() * (this.size() - 1));
-            int random2 = (int) (Math.random() * (this.size() - 1));
-            add(random2, remove(random1));
+        if (Math.random() > 0.1) {
+            aberraceByBlock();
+        } else {
+            aberraceByElement();
         }
     }
 
@@ -122,7 +123,6 @@ public class Chromosome extends ArrayList<Integer>{
            return sonChromosome;
     }
 
-
     public void calculateFitness() {
         double distanceSum = 0;
         int i = 0;
@@ -149,16 +149,25 @@ public class Chromosome extends ArrayList<Integer>{
                     random2 = temp;
                 }
             }
+            //移动区块
             Chromosome chromosome = (Chromosome) this.clone();
             if (site <= random1) {
                 chromosome.removeRange(random1,random2);
                 chromosome.addAll(site, this.subList(random1,random2));
             } else if (random2 > site && site > random1 ) {
-
+                if (random2 - random1 > size() - site) {
+                    chromosome.addAll(this.subList(random1,random2));
+                } else {
+                    chromosome.removeRange(random1,random2);
+                    chromosome.addAll(site, this.subList(random1, random2));
+                }
             } else {
-
+                chromosome.addAll(site, this.subList(random1, random2));
+                chromosome.removeRange(random1,random2);
             }
-
+            for (int j = 0; j < size(); j++) {
+                this.set(j,chromosome.get(j));
+            }
         }
     }
 

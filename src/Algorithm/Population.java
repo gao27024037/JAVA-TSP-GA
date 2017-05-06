@@ -45,12 +45,9 @@ public class Population extends ArrayList<Chromosome> {
         this.sort();
         Population sonPopulation = this.roulette();//子代
         sonPopulation.sort();
-        for (int i = 0; ; i++) {
-            if (!sonPopulation.contains(this.get(i))) {
-                sonPopulation.add(0,this.get(i));
-                break;
+            if (!sonPopulation.contains(this.get(0))) {
+                sonPopulation.add(0, this.get(0));
             }
-        }
         return sonPopulation;
     }
 
@@ -91,6 +88,7 @@ public class Population extends ArrayList<Chromosome> {
         this.sort();
         int i =1 ;
         System.out.println("最短路径"+(MaxDistance-this.get(0).getFitness())+""+this.get(0));
+        chartData.add(MaxDistance-this.get(0).getFitness());
 //        System.out.println((MaxDistance-this.get(i).getFitness())+""+this.get(i++));
 //        System.out.println((MaxDistance-this.get(i).getFitness())+""+this.get(i++));
 //        System.out.println((MaxDistance-this.get(i).getFitness())+""+this.get(i++));

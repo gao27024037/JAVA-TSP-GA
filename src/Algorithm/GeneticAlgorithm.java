@@ -1,5 +1,8 @@
 package Algorithm;
 
+import Frame.StatisticsFrame;
+
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -61,6 +64,10 @@ public class GeneticAlgorithm {
             population.cross();
             population.aberrance();
         }
+        JFrame frame=new JFrame("Java数据统计图");
+        frame.add(new StatisticsFrame().getChartPanel());
+        frame.setBounds(50, 50, 800, 600);
+        frame.setVisible(true);
 //        System.out.println("迭代1000次后最短路径是"+(100000d - population.get(0).getFitness()));
 
     }
