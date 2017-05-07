@@ -61,6 +61,9 @@ public class Population extends ArrayList<Chromosome> {
         for (int i = 0; i < sizeNow - 1; i += 1) {
             if (Math.random() < probabilityOfCross) {
                 Chromosome chromosome = this.get(i).crossWithAnother(this.get(i + 1));
+                if (Math.random() > probabilityOfAberrance) {
+                    chromosome.aberrance();
+                }
                 chromosome.calculateFitness();
                 if (!this.contains(chromosome)) {       //如果已存在，则不加入
                     this.add(chromosome);
