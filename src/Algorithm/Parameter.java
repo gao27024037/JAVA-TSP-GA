@@ -23,7 +23,7 @@ public class Parameter {
     //交叉概率
     public static double probabilityOfCross = 0.9;
     //变异率
-    public static double probabilityOfAberrance = Math.random()*0.15 + 0.05;
+    public static double probabilityOfAberrance = Math.random()*0.25 + 0.05;
     //初始城市群
     public static ArrayList<City> Cities = new ArrayList<City>();
 

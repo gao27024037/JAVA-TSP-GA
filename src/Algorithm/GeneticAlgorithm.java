@@ -26,7 +26,7 @@ public class GeneticAlgorithm {
             population.cross();                    //交叉
             population.aberrance();                //变异
         }
-        creatChart();   //产生图表
+        createChart();   //产生图表
         return population.get(0);
     }
 
@@ -45,7 +45,7 @@ public class GeneticAlgorithm {
     /**
      * 产生图表
      */
-    public static void creatChart(){
+    public static void createChart(){
         JFrame frame=new JFrame("Java数据统计图");
         frame.add(new StatisticsFrame().getChartPanel());
         frame.setBounds(50, 50, 800, 600);

@@ -22,12 +22,22 @@ public class Population extends ArrayList<Chromosome> {
         Population sonPopulation = new Population();
         sonPopulation.addAll(this.roulette());      //子代 加入父代轮盘赌筛选出来的染色体
         this.sort();                                //父代排序
-        clearProbability();                         //去掉probability的值，便于比较 是否存在
+        clearProbability();
+        sonPopulation.clearProbability();//去掉probability的值，便于比较 是否存在
+        for (Chromosome chromosome:sonPopulation
+             ) {
+            if (chromosome.equals(this.get(0))) {
+                sonPopulation.remove(chromosome);
+                sonPopulation.add(0,this.get(0));
+                break;
+            }
+        }
         for (int i = 0; i < size()/12; i++) {       //将父代前size()/12个元素加入子代中
             if (!sonPopulation.contains(this.get(i))) {
                 sonPopulation.add(i, this.get(i));
             }
         }
+//        printPopulation(sonPopulation);
         return sonPopulation;
     }
 
@@ -59,13 +69,27 @@ public class Population extends ArrayList<Chromosome> {
         }
 
         /*随机交叉*/
-        while(this.size() < populationSize ) {  //加入一个阈值，超过阈值退出
+        int k = 0;
+        while(this.size() < populationSize && k++ < populationSize * probabilityOfCross * 2) {  //加入一个阈值，超过阈值退出
             Chromosome chromosome = this.get((int)(Math.random()*(sizeNow - 1))).crossWithAnother(get((int)(Math.random()*(sizeNow - 1))));
             chromosome.calculateFitness();
             if (!this.contains(chromosome)) {       //如果已存在，则不加入
                 this.add(chromosome);
             }
         }
+        /*超过阈值，取一定量的随机个体 填满种群*/
+        for (int i = 0; i < Cities.size() ;i++) {       //初始化存num的数组
+            num.add(i);
+        }
+        while (this.size() < populationSize) {
+                Chromosome chromosome = new Chromosome();
+                chromosome.addAll(num);
+                Collections.shuffle(chromosome);        //打乱chromosome
+                chromosome.calculateFitness();
+                if (!this.contains(chromosome)) {
+                    this.add(chromosome);
+                }
+            }
     }
 
     /**
@@ -73,10 +97,9 @@ public class Population extends ArrayList<Chromosome> {
      * @return
      */
     public void aberrance() {
-        for (Chromosome chromosome:this
-                ) {
+        for (int i = size()/12; i < size(); i++) {
             if (Math.random() < probabilityOfAberrance) {
-                chromosome.aberrance();
+                this.get(i).aberrance();
             }
         }
         this.sort();        //按适应值排序
@@ -179,7 +202,7 @@ public class Population extends ArrayList<Chromosome> {
 
     //输出种群
     public void printPopulation(Population population) {
-        for (int i = 0; i < Math.min(population.size(),15); i++) {
+        for (int i = 0; i < Math.min(population.size(),25); i++) {
             System.out.println(population.get(i).getFitness()+" ||"+population.get(i).getProbability()+"||"+population.get(i));
         }
     }
