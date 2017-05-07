@@ -6,51 +6,26 @@ import java.util.ArrayList;
  * Created by gyl on 17-5-4.
  */
 public class Parameter {
-
+    //最大距离
     public static double MaxDistance = 5000;
-
+    //距离数组
     public static double[][] distance;
-
-    public static int generation =5000;
-
+    //代数
+    public static int generation =3000;
+    //种群数量
     public static int populationSize = 50;
-
+    //最佳距离
     public static ArrayList<Double> chartData = new ArrayList<Double>();
+    //次佳距离
     public static ArrayList<Double> chartData2 = new ArrayList<Double>();
+    //平均距离
     public static ArrayList<Double> chartDataAverage = new ArrayList<Double>();
-
     //交叉概率
     public static double probabilityOfCross = 0.9;
     //变异率
     public static double probabilityOfAberrance = Math.random()*0.15 + 0.05;
-
-    public static ArrayList<City> Cities = new ArrayList<City>();//初始城市群
-
-//    public static int Cities.size();
-
-    public static double[][] getDistance() {
-        return distance;
-    }
-
-    public static void setDistance(double[][] distance) {
-        Parameter.distance = distance;
-    }
-
-    public static int getGeneration() {
-        return generation;
-    }
-
-    public static void setGeneration(int generation) {
-        Parameter.generation = generation;
-    }
-
-    public int getPopulationSize() {
-        return populationSize;
-    }
-
-    public void setPopulationSize(int populationSize) {
-        this.populationSize = populationSize;
-    }
+    //初始城市群
+    public static ArrayList<City> Cities = new ArrayList<City>();
 
     //计算各个城市之间的距离
     public static void calculatedistance(ArrayList<City> Cities) {
