@@ -46,7 +46,7 @@ public class GeneticAlgorithm {
      * 产生图表
      */
     public static void createChart(){
-        JFrame frame=new JFrame("Java数据统计图");
+        JFrame frame=new JFrame("遗传算法适应值数据统计图");
         frame.add(new StatisticsFrame().getChartPanel());
         frame.setBounds(50, 50, 800, 600);
         frame.setVisible(true);
