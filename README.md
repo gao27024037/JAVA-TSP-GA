@@ -27,4 +27,4 @@
 
 变异方式采用：区块移动，单个基因互换
 
-最后利用JFreeChart.jar 做了个统计图表
+最后利用JFreeChart.jar 做了个统计图表 
