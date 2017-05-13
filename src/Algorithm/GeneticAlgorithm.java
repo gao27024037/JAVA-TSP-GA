@@ -3,14 +3,11 @@ package Algorithm;
 import Frame.StatisticsFrame;
 
 import javax.swing.*;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 import static Algorithm.Parameter.*;
 
 /**
+ * 向Frame返回最优基因
  * Created by gao27024037 on 2017/4/28.
  */
 public class GeneticAlgorithm {

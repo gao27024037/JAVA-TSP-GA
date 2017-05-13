@@ -3,6 +3,7 @@ package Algorithm;
 import java.util.ArrayList;
 
 /**
+ * 用于存取全局需要的确定变量
  * Created by gyl on 17-5-4.
  */
 public class Parameter {
